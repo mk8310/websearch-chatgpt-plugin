@@ -1,19 +1,16 @@
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
-from dotenv import load_dotenv
+from flask import request, jsonify, send_from_directory
 import requests
 import os
 import json
+
+from fastapi_app import ContextInformation
 from utils import process_results
 
-app = Flask(__name__)
-CORS(app)
+context_information = ContextInformation()
 
-def load_environment_variables():
-    load_dotenv()
-    return os.environ.get("GOOGLE_API_KEY"), os.environ.get("CUSTOM_SEARCH_ENGINE_ID")
+app = context_information.app
+logger = context_information.logger
 
-API_KEY, CX = load_environment_variables()
 
 @app.route('/.well-known/ai-plugin.json', methods=['GET'])
 def get_plugin_info():
@@ -24,13 +21,14 @@ def get_plugin_info():
 
         return jsonify(data)
 
+
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('q', '')
     if not query:
         return jsonify({"error": "No query provided"}), 400
-    
-    url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={CX}&q={query}&num=10"
+
+    url = f"https://www.googleapis.com/customsearch/v1?key={context_information.api_key}&cx={context_information.cx}&q={query}&num=10"
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -43,9 +41,11 @@ def search():
         print(f"Error fetching search results: {error_data}")  # Print the error data
         return jsonify({"error": "Error fetching search results", "details": error_data}), response.status_code
 
+
 @app.route('/.well-known/<path:filename>')
 def serve_well_known_files(filename):
     return send_from_directory(os.path.join(os.getcwd(), ".well-known"), filename)
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)

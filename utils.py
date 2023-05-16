@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
+
 class SearchResult:
     def __init__(self, title, link):
         self.title = title
@@ -20,6 +21,7 @@ class SearchResult:
             'full_content': self.full_content
         }
 
+
 def fetch_content(url, summary=False):
     """
     Fetches the content of the given URL.
@@ -31,7 +33,7 @@ def fetch_content(url, summary=False):
             soup = BeautifulSoup(response.text, 'lxml')
             text = ' '.join(soup.stripped_strings)
             words = text.split()
-            
+
             if len(words) > 3000:
                 words = words[:3000]
                 text = ' '.join(words)
@@ -55,7 +57,6 @@ def fetch_content(url, summary=False):
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
 
-
             driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
             driver.get(url)
             html_content = driver.page_source
@@ -75,6 +76,7 @@ def fetch_content(url, summary=False):
         except Exception as e:
             print(f"Error fetching content: {e}")
             return None
+
 
 def process_results(results):
     formatted_results = [SearchResult(res['title'], res['link']) for res in results]
