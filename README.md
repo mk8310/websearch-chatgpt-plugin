@@ -20,7 +20,7 @@ https://user-images.githubusercontent.com/1191646/230582839-966d8695-4791-4a6c-9
 
 Deploy to Heroku with one click by clicking the button below: 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Sogody/google-chatgpt-plugin)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/mk8310/websearch-chatgpt-plugin)
 
 **A Google API Key and a Custom Search Engine ID is required to complete the installation, both of which can be generated [here](https://console.cloud.google.com/apis/credentials) and [here](https://cse.google.com/cse/create/new).**
 
