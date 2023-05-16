@@ -3,7 +3,7 @@ import requests
 import os
 import json
 
-from fastapi_app import ContextInformation
+from context_information import ContextInformation
 from utils import process_results
 
 context_information = ContextInformation()
@@ -38,7 +38,7 @@ def search():
         return jsonify({"results": formatted_results})
     else:
         error_data = response.json()  # Get JSON data from the error response
-        print(f"Error fetching search results: {error_data}")  # Print the error data
+        logger.error(f"Error fetching search results: {error_data}")  # Print the error data
         return jsonify({"error": "Error fetching search results", "details": error_data}), response.status_code
 
 
